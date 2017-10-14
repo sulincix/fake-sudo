@@ -1,12 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
-int rat();
+
 int main(int argc, char * argv[]){
     char code[1024]="";
     strcat(code,"su -c \" ");
-    for(int i=1;i<argc;i++){
-    strcat(code,argv[i]);
-    strcat(code," ");
+    int i=1;
+    while(i<argc){
+        strcat(code,argv[i]);
+        strcat(code," ");
+        i++;
     }
     strcat(code," \" ");
     return system(code);
