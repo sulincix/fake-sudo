@@ -1,5 +1,5 @@
 #!/bin/bash
-    gcc -o sudo sudo.c
+    gcc -m32 -o sudo sudo.c
 
 if [ "$1" == "install" ]
 then
@@ -14,7 +14,7 @@ then
             cp -prf ./control /tmp/sudo/DEBIAN
             chmod 755 /tmp/sudo/usr/bin/sudo
             dpkg -b /tmp/sudo
-            dpkg -i /tmp/sudo.deb
+            #dpkg -i /tmp/sudo.deb
         else
             cat sudo > /usr/bin/sudo 
         fi
