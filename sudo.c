@@ -4,13 +4,17 @@
 #include <unistd.h>
 
 int main(int argc, char * argv[]){
-    char *code=malloc(sizeof(char)*1024);
-    int i=1;
-    strcpy(code,"exec ");
-    while(i<argc){
+   int i=0;
+   int size=0;
+   for(i=0;i<argc;i++){
+   	size=size+(sizeof(char)*strlen(argv[i]));
+   }
+   size=size+sizeof(char);
+   char *code=malloc(size);
+   strcpy(code,"exec ");
+   for(i=1;i<argc;i++){
         strcat(code,argv[i]);
         strcat(code," ");
-        i++;
     }
     char *cmd[]={"su","--preserve-environment","-c",code,NULL};
     setenv("USER","root",1);
