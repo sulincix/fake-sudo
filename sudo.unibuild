@@ -1,0 +1,14 @@
+name=sudo
+version=1.0
+summary="fake sudo"
+description="sudo command without service. Uses su binary"
+source=("sudo.c")
+
+_build(){
+	gcc -o sudo sudo.c
+}
+
+_install(){
+	mkdir -p $INSTALLDIR/usr/bin/
+	install sudo $INSTALLDIR/usr/bin/sudo
+}
