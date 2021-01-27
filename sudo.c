@@ -16,7 +16,7 @@ int main(int argc, char * argv[]){
         strcat(code,argv[i]);
         strcat(code," ");
     }
-    char *cmd[]={"su","--preserve-environment","-c",code,NULL};
+    char *cmd[]={"su","-s","/bin/sh","--preserve-environment","-c",code,NULL};
     setenv("USER","root",1);
     setenv("HOME","/root",1);
     return execvp(cmd[0], cmd);
