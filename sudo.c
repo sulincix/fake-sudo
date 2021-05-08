@@ -7,9 +7,9 @@ int main(int argc, char * argv[]){
    int i=0;
    int size=0;
    for(i=0;i<argc;i++){
-   	size=size+(sizeof(char)*strlen(argv[i]));
+   	size=size+(sizeof(char)*(strlen(argv[i])+1));
    }
-   size=size+sizeof(char);
+   size=size+(6*sizeof(char));
    char *code=malloc(size);
    strcpy(code,"exec ");
    for(i=1;i<argc;i++){
