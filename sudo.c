@@ -2,10 +2,14 @@
 #include <string.h>
 #define _GNU_SOURCE
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <wslblock.c>
 
 int main(int argc, char * argv[]){
    int i=0;
    int size=0;
+   wsl_block();
    for(i=0;i<argc;i++){
    	size=size+(sizeof(char)*(strlen(argv[i])+1));
    }
@@ -16,7 +20,8 @@ int main(int argc, char * argv[]){
         strcat(code,argv[i]);
         strcat(code," ");
     }
-    char *cmd[]={"su","-s","/bin/sh","--preserve-environment","-c",code,NULL};
+    umask(0022);
+    char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
     setenv("USER","root",1);
     setenv("HOME","/root",1);
     return execvp(cmd[0], cmd);

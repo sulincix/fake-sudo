@@ -1,5 +1,5 @@
 build:
-	gcc -O3 -s -g  -o sudo sudo.c
+	gcc -O3 -s -o sudo sudo.c -I.
 
 install:
 	mkdir -p $(DESTDIR)/usr/bin/ &>/dev/null
