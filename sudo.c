@@ -27,9 +27,15 @@ int main(int argc, char * argv[]){
         setenv("DISPLAY",display,1);
         setenv("TERM","sudo",1);
     }
-    char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
     setenv("USER","root",1);
     setenv("HOME","/root",1);
     setenv("PATH","/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usb/sbin",1);
-    return execvp(cmd[0], cmd);
+    if(getenv("FAKEROOT")!=NULL){
+        char *cmd[]={"unshare","-ru","/bin/sh","-c",code,NULL};
+        return execvp(cmd[0], cmd);
+
+    }else{
+        char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
+        return execvp(cmd[0], cmd);
+    }
 }
