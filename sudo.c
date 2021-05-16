@@ -34,6 +34,9 @@ int main(int argc, char * argv[]){
         char *cmd[]={"unshare","-ru","/bin/sh","-c",code,NULL};
         return execvp(cmd[0], cmd);
 
+    }else if (getenv("NOROOT")!=NULL){
+        char *cmd[]={"/bin/sh","-c",code,NULL};
+        return execvp(cmd[0], cmd);
     }else{
         char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
         return execvp(cmd[0], cmd);
