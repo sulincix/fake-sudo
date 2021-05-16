@@ -21,8 +21,15 @@ int main(int argc, char * argv[]){
         strcat(code," ");
     }
     umask(0022);
+    if(getenv("NOENV")!=NULL){
+        char* display=getenv("DISPLAY");
+        clearenv();
+        setenv("DISPLAY",display,1);
+        setenv("TERM","sudo",1);
+    }
     char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
     setenv("USER","root",1);
     setenv("HOME","/root",1);
+    setenv("PATH","/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usb/sbin",1);
     return execvp(cmd[0], cmd);
 }
