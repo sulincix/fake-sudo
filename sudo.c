@@ -38,7 +38,7 @@ int main(int argc, char * argv[]){
         char *cmd[]={"/bin/sh","-c",code,NULL};
         return execvp(cmd[0], cmd);
     }else{
-        char *cmd[]={"su","-s","/bin/sh","-p","-c",code,NULL};
+        char *cmd[]={"su","-","-s","/bin/sh","-p","-c",code,NULL};
         return execvp(cmd[0], cmd);
     }
 }
