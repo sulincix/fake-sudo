@@ -1,1 +1,3 @@
-sudo
+src-old/sudo
+src/sudo
+src/libsudo.so
