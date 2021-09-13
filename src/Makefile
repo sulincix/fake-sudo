@@ -12,5 +12,6 @@ install:
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)/ || true
 	install libsudo.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)/libsudo.so
 	cp -pf sudo $(DESTDIR)/$(PREFIX)/$(BINDIR)/sudo
+	install libsudo.h $(DESTDIR)/$(PREFIX)/include/libsudo.h
 clean:
 	rm -f libsudo.so sudo
