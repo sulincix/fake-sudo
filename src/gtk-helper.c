@@ -12,7 +12,15 @@ int main(int argc, char *argv[]){
     if(auth(pass)){
         unsetenv("PASSWORD");
         setuid(0);
-        return system(arg2cmd(argc,argv));
+        if(argv==1){
+            return 0;
+        }
+        char *cmd[argc];
+        for(int i=0;i<argc-1;i++){
+            cmd[i] = argv[i+1];
+        }
+        cmd[argc-1] = NULL;
+        execvp(which(argv[1]),cmd);
     }
     fprintf(stderr,"Authentication failure\n");
     return 1;

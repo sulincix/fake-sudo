@@ -6,7 +6,8 @@ GtkWindow *window;
 GtkLabel *label;
 GtkEntry *pass;
 GtkWidget *header;
-char* ccmd="";
+char* fargv[];
+int fargv;
 
 void button_event(GtkWidget *button, gpointer *data){
     const gchar *passwd = gtk_entry_get_text (GTK_ENTRY (pass));
@@ -19,18 +20,24 @@ void button_event(GtkWidget *button, gpointer *data){
     }
     setenv("PASSWORD",passwd,1);
     setenv("TOKEN",TOKEN,1);
-    char *cmd = malloc(10240*sizeof(char));;
-    strcpy(cmd,"gtk-sudo-helper ");
-    strcat(cmd,ccmd);
     if(system("gtk-sudo-helper")==0){
         gtk_widget_hide(window);
-        system(cmd);
+        char *cmd[fargc];
+        cmd[0] = "gtk-sudo-helper";
+        for(int i=0;i<fargc-1;i++){
+            cmd[i+1] = fargv[i+1];
+        }
+        cmd[fargc-1] = NULL;
+        execvp(which(fargv[1]),cmd);
         gtk_main_quit();
     }
 }
 
 int main(int argc,char *argv[]){
     gtk_init (&argc, &argv);
+    fargv = argv;
+    fargc = argc;
+    
     GtkWidget *button, *cancel, *box, *bbox;
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_resizable(window, FALSE);
