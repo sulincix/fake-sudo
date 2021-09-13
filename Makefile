@@ -1,9 +1,22 @@
+DESTDIR=/
+PREFIX=usr
+LIBDIR=/lib
+BINDIR=/bin
+
 build:
-	gcc -O3 -s -o sudo sudo.c -I.
+	make -C src build
+
+build-old:
+	make -C src-old build
 
 install:
-	mkdir -p $(DESTDIR)/usr/bin/ &>/dev/null
-	install sudo $(DESTDIR)/usr/bin/sudo
+	make -C src install DESTDIR=$(DESTDIR) PREFIX=$(PREFIX) LIBDIR=$(LIBDIR) BINDIR=$(BINDIR)
+
+install-old:
+	make -C src-old install DESTDIR=$(DESTDIR) PREFIX=$(PREFIX)
 
 clean:
-	rm -f sudo
+	make -C src clean
+
+clean-old:
+	make -C src-old clean

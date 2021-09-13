@@ -1,13 +1,11 @@
 # The Fake Sudo
-`su -c "command"` with small features
+`sudo` command without daemon or service
 
 ### for build:
-./build.sh or make
+make
 
 ### for install:
-./build.sh install or make install
+make install
 
-### control:
-* `NOENV=1 sudo (command)` will isolate environment variable
-* `FAKEROOT=1 sudo (command)` will use unshare instead of su
-* `NOROOT=1 sudo (command)` will run command without root
+## For legacy
+please see README-old.md
