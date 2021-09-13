@@ -9,9 +9,9 @@ build:
 	chmod u+s ./sudo
 build-gtk:
 	echo -e "#define TOKEN \"$$RANDOM\"" > token.h
-	gcc -I. -L. -g gtk-main.c `pkg-config --cflags --libs gtk+-3.0` -lsudo -o gtk-sudo
-	sha1sum gtk-sudo | cut -f 1 -d " " | sed "s/^/#define HASH \"/g;s/$$/\"/g"  >> token.h
 	gcc -I. -L. gtk-helper.c -lsudo -o gtk-sudo-helper
+	sha1sum gtk-sudo-helper | cut -f 1 -d " " | sed "s/^/#define HASH \"/g;s/$$/\"/g"  >> token.h
+	gcc -I. -L. -g gtk-main.c `pkg-config --cflags --libs gtk+-3.0` -lsudo -o gtk-sudo
 	chmod u+s ./gtk-sudo-helper
 install:
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)/ || true
@@ -25,4 +25,4 @@ install-gtk:
 	cp -pf gtk-sudo-helper $(DESTDIR)/$(PREFIX)/$(BINDIR)/
 	
 clean:
-	rm -f libsudo.so sudo gtk-sudo-helper gtk-sudo
+	rm -f libsudo.so sudo gtk-sudo-helper gtk-sudo token.h

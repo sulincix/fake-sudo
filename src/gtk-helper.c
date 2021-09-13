@@ -9,10 +9,6 @@ int main(int argc, char *argv[]){
     if(!STREQ(getenv("TOKEN"),TOKEN)){
         return 1;
     }
-    setenv("HASH",HASH,1);
-    if(system("[ $HASH == $(sha1sum $(which gtk-sudo) | cut -f 1 -d ' ') ]")!=0){
-        return 1;
-    }
     if(auth(pass)){
         unsetenv("PASSWORD");
         setuid(0);

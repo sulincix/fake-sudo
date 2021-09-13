@@ -13,12 +13,16 @@ void button_event(GtkWidget *button, gpointer *data){
     if(STREQ(passwd,"")){
         return;
     }
+    setenv("HASH",HASH,1);
+    if(system("[ $HASH == $(sha1sum $(which gtk-sudo-helper) | cut -f 1 -d ' ') ]")!=0){
+        return 1;
+    }
     setenv("PASSWORD",passwd,1);
     setenv("TOKEN",TOKEN,1);
     char *cmd = malloc(10240*sizeof(char));;
-    strcpy(cmd,"gtk-sudo-helper ");
+    strcpy(cmd,"$(which gtk-sudo-helper) ");
     strcat(cmd,ccmd);
-    if(system("gtk-sudo-helper")==0){
+    if(system("$(which gtk-sudo-helper)")==0){
         gtk_widget_hide(window);
         system(cmd);
         gtk_main_quit();
