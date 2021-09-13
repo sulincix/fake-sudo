@@ -4,7 +4,7 @@
 #include <libsudo.h>
 
 int main(int argc, char *argv[]){
-    if(auth()){
+    if(auth("")){
         return system(arg2cmd(argc,argv));
     }
     fprintf(stderr,"Authentication failure\n");

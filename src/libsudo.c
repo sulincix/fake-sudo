@@ -21,7 +21,7 @@ char *arg2cmd(int argc,char* argv[]){
     }
     return cmd;
 }
-int auth(){
+int auth(char* pass){
     wsl_block();
     uid_t uid = getuid();
     char *unencrypted="", *encrypted="", *correct="";
@@ -33,7 +33,10 @@ int auth(){
         }
         struct spwd *sp = getspnam ("root");
         correct = sp->sp_pwdp;
-        unencrypted = getpass ("Password:");
+        if(STREQ(pass,"")){
+            pass = getpass ("Password:");
+        }
+        unencrypted = pass;
         encrypted = crypt (unencrypted, correct);
     }
     setenv("USER","root",1);
