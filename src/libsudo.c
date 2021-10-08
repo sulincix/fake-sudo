@@ -47,6 +47,14 @@ int auth(char* pass){
     return uid == 0 || STREQ (encrypted, correct);
 }
 
+int auth_crypt(char* crypt){
+    uid_t uid = getuid();
+    char* correct="";
+    struct spwd *sp = getspnam ("root");
+    correct = sp->sp_pwdp;
+    return uid == 0 || STREQ (crypt, correct);
+}
+
 char* which(char* cmd){
     char* fullPath = getenv("PATH");
     struct stat buffer;
