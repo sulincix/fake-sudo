@@ -39,19 +39,16 @@ int auth(char* pass){
     int retval;
     uid_t uid = getuid();
     if(uid != 0){
-        setuid(0);
-        if(getuid()!=0){
-            fprintf(stderr,"Failed to set uid. (setuid error)\n");
-            return 7;
-        }else{
-            setuid(uid);
-        }
-        retval = pam_start("sudo", "root", &conv, &pamh);
+        retval = pam_start("su", "root", &conv, &pamh);
         if (retval == PAM_SUCCESS){
             retval = pam_authenticate(pamh, 0);
+        }else{
+            return 0;
         }
         if (retval == PAM_SUCCESS){
             retval = pam_acct_mgmt(pamh, 0);
+        }else{
+            return 0;
         }
     }
     return uid == 0 || retval == PAM_SUCCESS;
@@ -76,8 +73,7 @@ int auth(char* pass){
         unencrypted = pass;
         encrypted = crypt (unencrypted, correct);
     }
-    setenv("USER","root",1);
-    setenv("HOME","/root",1);
+    setuid(uid);
     return uid == 0 || STREQ (encrypted, correct);
 }
 #endif
