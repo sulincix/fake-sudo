@@ -2,11 +2,17 @@ DESTDIR=/
 PREFIX=usr
 LIBDIR=/lib
 BINDIR=/bin
+PAM=-DENABLE_PAM -lpam -lpam_misc
 
 build:
-	gcc libsudo.c -shared -o libsudo.so -fPIC -lcrypt -I..
+	gcc libsudo.c -shared -o libsudo.so -fPIC -lcrypt -I.. 
 	gcc main.c -L. -I. -o sudo -lsudo
 	chmod u+s ./sudo
+
+build-pam:
+	gcc libsudo.c -shared -o libsudo.so -fPIC -lcrypt -I.. $(PAM)
+	gcc main.c -L. -I. -o sudo -lsudo $(PAM)
+	chmod u+s ./sudo	
 build-gtk:
 	echo -e "#define TOKEN \"$$RANDOM\"" > token.h
 	gcc -I. -L. gtk-helper.c -lsudo -o gtk-sudo-helper
@@ -26,3 +32,4 @@ install-gtk:
 	
 clean:
 	rm -f libsudo.so sudo gtk-sudo-helper gtk-sudo token.h
+

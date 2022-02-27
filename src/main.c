@@ -4,7 +4,7 @@
 #include <libsudo.h>
 
 int main(int argc, char *argv[]){
-    if(auth("")){
+    if(auth("") != 7){
         char *cmd[argc];
         for(int i=0;i<argc-1;i++){
             cmd[i] = argv[i+1];

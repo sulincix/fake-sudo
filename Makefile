@@ -4,6 +4,9 @@ LIBDIR=/lib
 BINDIR=/bin
 
 build:
+	make -C src build-pam
+
+build-nopam:
 	make -C src build
 
 build-gtk:
@@ -26,3 +29,6 @@ clean:
 
 clean-old:
 	make -C src-old clean
+
+test:
+	LD_LIBRARY_PATH=$(PWD)/src ./src/sudo ls

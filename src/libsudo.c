@@ -7,6 +7,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifdef ENABLE_PAM
+#include <security/pam_appl.h>
+#include <security/pam_misc.h>
+#endif
+
 int STREQ(char* a, char* b){
     return strcmp(a,b) == 0;
 }
@@ -23,7 +28,36 @@ char *arg2cmd(int argc,char* argv[]){
     }
     return cmd;
 }
+#ifdef ENABLE_PAM
+static struct pam_conv conv = {
+    misc_conv,
+    NULL
+};
 
+int auth(char* pass){
+    pam_handle_t *pamh=NULL;
+    int retval;
+    uid_t uid = getuid();
+    if(uid != 0){
+        setuid(0);
+        if(getuid()!=0){
+            fprintf(stderr,"Failed to set uid. (setuid error)\n");
+            return 7;
+        }else{
+            setuid(uid);
+        }
+        retval = pam_start("sudo", "root", &conv, &pamh);
+        if (retval == PAM_SUCCESS){
+            retval = pam_authenticate(pamh, 0);
+        }
+        if (retval == PAM_SUCCESS){
+            retval = pam_acct_mgmt(pamh, 0);
+        }
+    }
+    return uid == 0 || retval == PAM_SUCCESS;
+}
+
+#else
 int auth(char* pass){
     wsl_block();
     uid_t uid = getuid();
@@ -46,7 +80,7 @@ int auth(char* pass){
     setenv("HOME","/root",1);
     return uid == 0 || STREQ (encrypted, correct);
 }
-
+#endif
 int auth_crypt(char* crypt){
     uid_t uid = getuid();
     char* correct="";
