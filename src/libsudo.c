@@ -73,7 +73,6 @@ int auth(char* pass){
         unencrypted = pass;
         encrypted = crypt (unencrypted, correct);
     }
-    setuid(uid);
     return uid == 0 || STREQ (encrypted, correct);
 }
 #endif
