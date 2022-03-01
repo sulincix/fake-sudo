@@ -3,13 +3,12 @@
 #include <string.h>
 #include <libsudo.h>
 #include <unistd.h>
-int is_live();
 int main(int argc, char *argv[], char *envp[]){
     if(argc<2){
         fprintf(stderr,"usage: sudo [command]\n");
         return 1;
     }
-    if(auth("") != 7 || is_live()){
+    if(auth("") == 1){
         setenv("USER","root",1);
         setenv("HOME","/root",1);
         setenv("PATH","/bin:/usr/bin:/sbin/:/usr/sbin",1);
@@ -27,14 +26,4 @@ int main(int argc, char *argv[], char *envp[]){
     }
     fprintf(stderr,"Authentication failure\n");
     return 1;
-}
-// no password for live (for debian/ubuntu)
-int is_live(){
-    FILE* ff=fopen("/proc/cmdline","r");
-   char *line;
-   fscanf(ff,"%s",&line);
-   if(strstr(line,"boot=live") != NULL || strstr(line,"boot=casper") != NULL){
-       return 1;
-   }
-   return 0;
 }

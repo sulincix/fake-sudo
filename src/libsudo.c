@@ -51,7 +51,7 @@ int auth(char* pass){
             return 0;
         }
     }
-    return uid == 0 || retval == PAM_SUCCESS;
+    return retval == PAM_SUCCESS;
 }
 
 #else
