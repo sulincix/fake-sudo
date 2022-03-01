@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libsudo.h>
-#include <libsudo.h>
+#include <unistd.h>
 int is_live();
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[], char *envp[]){
     if(argc<2){
         fprintf(stderr,"usage: sudo [command]\n");
         return 1;
@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
     if(auth("") != 7 || is_live()){
         setenv("USER","root",1);
         setenv("HOME","/root",1);
+        setenv("PATH","/bin:/usr/bin:/sbin/:/usr/sbin",1);
         setuid(0);
         if(getuid()!=0){
             fprintf(stderr,"Failed to set uid. (setuid error)\n");
@@ -22,7 +23,7 @@ int main(int argc, char *argv[]){
             cmd[i] = argv[i+1];
         }
         cmd[argc-1] = NULL;
-        execvp(which(argv[1]),cmd);
+        execve(which(argv[1]),cmd,envp);
     }
     fprintf(stderr,"Authentication failure\n");
     return 1;
